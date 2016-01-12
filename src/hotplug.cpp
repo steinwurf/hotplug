@@ -7,11 +7,11 @@
 
 namespace hotplug_cam
 {
+    udev* hotplug;
+    udev_monitor* hotplug_monitor;
+
     boost::asio::posix::stream_descriptor get_stream_descriptor(boost::asio::io_service& ios)
     {
-        udev* hotplug;
-        udev_monitor* hotplug_monitor;
-
         hotplug = udev_new();
         if(!hotplug)
         {
