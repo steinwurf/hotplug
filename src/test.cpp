@@ -5,32 +5,31 @@
 
 boost::asio::io_service io_service;
 
-void WorkerThread()
+void read_handle(boost::asio::posix::stream_descriptor* descriptor,
+                 const boost::system::error_code& ec,
+                 std::size_t bytes_read)
 {
-	std::cout << "Thread Start\n";
-	io_service.run();
-	std::cout << "Thread Finish\n";
+    if(!ec)
+    {
+        int file_descripter = descriptor.native_handle();
+    }
+    else
+    {
+        std::cout << << "there was an error" << std::endln;
+    }
 }
 
-int main( int argc, char * argv[] )
+void watch_descriptor(boost::asio::io_service& ios, int file_descriptor)
 {
-	boost::shared_ptr< boost::asio::io_service::work > work(
-		new boost::asio::io_service::work( io_service )
-	);
+    boost::asio::posix::stream_descriptor* descriptor =
+        new boost::asio::posix::stream_descriptor();
 
-	std::cout << "Press [return] to exit." << std::endl;
+    std::vector<char> buffer(0);
+    descriptor->async_read_some(boost::asio::buffer(buffer, 0),
+                                boost::bind(read_handle, descriptor, _1, _2));
+}
 
-	boost::thread_group worker_threads;
-	for( int x = 0; x < 4; ++x )
-	{
-		worker_threads.create_thread( WorkerThread );
-	}
-
-	std::cin.get();
-
-	io_service.stop();
-
-	worker_threads.join_all();
-
-	return 0;
+int main(void)
+{
+    return 0;
 }
