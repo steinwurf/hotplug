@@ -5,7 +5,7 @@
 
 #include "hotplug_cam.hpp"
 
-namespace hotplug_cam
+namespace hotplug
 {
     udev* hotplug;
     udev_monitor* hotplug_monitor;

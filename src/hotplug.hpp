@@ -11,7 +11,7 @@
 #include <libudev.h>
 
 #include <boost/asio/posix/stream_descriptor.hpp>
-namespace hotplug_cam
+namespace hotplug
 {
     boost::asio::posix::stream_descriptor get_stream_descriptor(boost::asio::io_service& ios);
 }
