@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 # encoding: utf-8
 
-APPNAME = 'cpuid'
-VERSION = '4.0.0'
+APPNAME = 'hotplug'
+VERSION = '0.0.1'
 
 import waflib.extras.wurf_options
 
@@ -53,13 +53,6 @@ def build(bld):
 
     bld.env.append_unique(
         'DEFINES_STEINWURF_VERSION',
-        'STEINWURF_CPUID_VERSION="{}"'.format(VERSION))
+        'STEINWURF_HOTPLUG_VERSION="{}"'.format(VERSION))
 
     bld.recurse('src/hotplug')
-
-    if bld.is_toplevel():
-
-        # Only build tests when executed from the top-level wscript,
-        # i.e. not when included as a dependency
-#        bld.recurse('test')
-#        bld.recurse('examples/print_cpuinfo')
