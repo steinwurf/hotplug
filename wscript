@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 APPNAME = 'hotplug'
-VERSION = '0.0.1'
+VERSION = '1.0.0'
 
 import waflib.extras.wurf_options
 
@@ -56,3 +56,10 @@ def build(bld):
         'STEINWURF_HOTPLUG_VERSION="{}"'.format(VERSION))
 
     bld.recurse('src/hotplug')
+
+    if bld.is_toplevel():
+
+        # Only build tests when executed from the top-level wscript,
+        # i.e. not when included as a dependency
+        bld.recurse('test')
+#        bld.recurse('examples/print_cpuinfo')
