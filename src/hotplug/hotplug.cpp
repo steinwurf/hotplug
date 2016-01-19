@@ -3,18 +3,34 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include <thread>
+#include <iostream>
+
+#include <boost/asio/io_service.hpp>
 #include <platform/config.hpp>
+
 
 #if defined(PLATFORM_LINUX)
     #include "handle_hotplug_linux.hpp"
 #endif
 
-#include "hotpluginfo.hpp"
+void print_add_info(std::string device)
+{
+    std::cout << "add: " << device << std::endl;
+}
+
+void print_remove_info(std::string device)
+{
+    std::cout << "remove:" << device << std::endl;
+}
 
 namespace hotplug
 {
 
-    hotpluginfo info = hotpluginfo();
-    std::thread hotplug_montoring(start_hotplug_montoring, info);
+    boost::asio::io_service io;
+
+    handle_hotplug_linux monitor = handle_hotplug_linux(io,
+                                                        print_add_info,
+                                                        print_remove_info);
+    io.run();
+    monitor.join_thread();
 }

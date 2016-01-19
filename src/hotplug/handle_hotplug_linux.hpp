@@ -5,84 +5,129 @@
 
 #pragma once
 
+#include <functional>
+#include <string>
+#include <poll.h>
 #include <libudev.h>
+
+
+#include <boost/thread.hpp>
+
+#include "device_added_handler.hpp"
+#include "device_removed_handler.hpp"
+
 
 namespace hotplug
 {
-    udev* hotplug;
-    udev_monitor* hotplug_monitor;
 
-    void init()
+    class handle_hotplug_linux: public handle_hotplug
     {
-        // create udev object
-        hotplug = udev_new();
-        if(!hotplug)
+    public:
+        handle_hotplug_linux(boost::asio::io_service io,
+                       std::function<void(std::string)> add_callback,
+                       std::function<void(std::string)> remove_callback):
+            m_io(io), m_add_callback(add_callback),
+            m_remove_callback(remove_callback)
         {
-            // throw exception
-            // should be assert ?
+
         }
 
-        // create the udev monitor
-        hotplug_monitor = udev_monitor_new_from_netlink(hotplug, "udev");
-
-        // start receiving hotplug events
-        udev_monitor_enable_receiving(hotplug_monitor);
-    }
-
-    void deinit()
-    {
-        // destroy the udev monitor
-        udev_monitor_unref(hotplug_monitor);
-
-        // destroy the udev object
-        udev_unref(hotplug);
-    }
-
-    void run(hotpluginfo info)
-    {
-        // create the poll item
-        pollfd items[1];
-        items[0].fd = udev_monitor_get_fd(hotplug_monitor);
-        items[0].events = POLLIN;
-        items[0].revents = 0;
-
-        // while there are hotplug events to process
-        while(poll(items, 1, 50) > 0)
+        void init()
         {
-
-            // receive the relevant device
-            udev_device* dev = udev_monitor_receive_device(hotplug_monitor);
-            if(!dev)
+            // create udev object
+            m_hotplug = udev_new();
+            if(!m_hotplug)
             {
-                // error receiving device, skip it
-                continue;
+                // throw exception
+                // should be assert ?
             }
 
-            if(udev_device_get_action(dev) != NULL
-               && udev_device_get_devnode(dev) != NULL)
+            // create the udev monitor
+            m_hotplug_monitor = udev_monitor_new_from_netlink(m_hotplug, "udev");
+
+            // start receiving hotplug events
+            udev_monitor_enable_receiving(m_hotplug_monitor);
+        }
+
+        void deinit()
+        {
+            // destroy the udev monitor
+            udev_monitor_unref(m_hotplug_monitor);
+
+            // destroy the udev object
+            udev_unref(m_hotplug);
+        }
+
+        void run()
+        {
+            // create the poll item
+            pollfd items[1];
+            items[0].fd = udev_monitor_get_fd(m_hotplug_monitor);
+            items[0].events = POLLIN;
+            items[0].revents = 0;
+
+            // while there are hotplug events to process
+            while(poll(items, 1, 50) > 0)
             {
-                if(((std::string)udev_device_get_devnode(dev))
-                   .find("/dev/video") == 0)
+
+                // receive the relevant device
+                udev_device* dev = udev_monitor_receive_device(m_hotplug_monitor);
+                if(!dev)
                 {
-                    info.set_device(udev_device_get_devnode(dev));
-                    info.set_action(udev_device_get_action(dev));
+                    // error receiving device, skip it
+                    continue;
+                }
+
+                if(udev_device_get_action(dev) != NULL
+                   && udev_device_get_devnode(dev) != NULL)
+                {
+
+                    if((std::string)udev_device_get_action(dev).compare("add") == 0)
+                    {
+                        device_added_handler dah = {m_add_callback, "add"};
+                        m_io.post(dah);
+                    }
+
+                    if((std::string)udev_device_get_action(dev).compare("remove") == 0)
+                    {
+                        device_added_handler drh = {m_add_callback, "remove"};
+                        m_io.post(drh);
+                    }
+
+                    udev_device_unref(dev);
+
+                    // clear the revents
+                    items[0].revents = 0;
+
+
                 }
             }
-
-            udev_device_unref(dev);
-
-            // clear the revents
-            items[0].revents = 0;
         }
-    }
 
-    void start_hotplug_montoring(hotpluginfo info)
-    {
-        init();
-        while(true)
+        void execute_run()
         {
-            run(info);
+            init();
+            while(true)
+            {
+
+                run(add_callback, remove_callback);
+            }
+            deinit();
         }
-        deinit()
-    }
+
+        void start_hotplug_monitoring()
+        {
+            m_thread = std::thread(execute_run);
+        }
+
+        void join_thread()
+        {
+            m_hotplug_thread.join();
+        }
+
+    private:
+        udev* m_hotplug;
+        udev_monitor* m_hotplug_monitor;
+        std::thread m_hotplug_thread;
+    };
 }
