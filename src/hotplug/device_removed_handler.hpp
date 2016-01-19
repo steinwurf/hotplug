@@ -7,7 +7,7 @@
 
 struct device_remove_handler
 {
-    std::function<void(string)> m_callback;
+    std::function<void(std::string)> m_callback;
     std::string m_device;
 
     device_remove_handler(std::function<void(std::string)> callback,
@@ -21,4 +21,4 @@ struct device_remove_handler
     {
         m_callback(m_device);
     }
-}
+};

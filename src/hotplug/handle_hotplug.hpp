@@ -9,17 +9,20 @@
 
 #include <boost/asio/io_service.hpp>
 
-class handle_hotplug
+namespace hotplug
 {
-public:
-    virtual void init() = 0;
-    virtual void deinit() = 0;
-    virtual void run() = 0;
-    virtual void execute_run() = 0;
-    virtual void start_hotplug_monitoring() = 0;
+    class handle_hotplug
+    {
+    public:
+        virtual void init() = 0;
+        virtual void deinit() = 0;
+        virtual void run(boost::asio::io_service& io) = 0;
+        virtual void execute_run(boost::asio::io_service& io) = 0;
+        virtual void start_hotplug_monitoring(boost::asio::io_service& io) = 0;
 
-protected:
-    boost::asio::io_service m_io;
-    std::function<void(std::string)> m_add_callback;
-    std::function<void(std::string)> m_remove_callback;
-};
+    protected:
+        boost::asio::io_service m_io;
+        std::function<void(std::string)> m_add_callback;
+        std::function<void(std::string)> m_remove_callback;
+    };
+}

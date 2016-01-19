@@ -57,9 +57,9 @@ def build(bld):
 
     bld.recurse('src/hotplug')
 
-    if bld.is_toplevel():
+#    if bld.is_toplevel():
 
         # Only build tests when executed from the top-level wscript,
         # i.e. not when included as a dependency
-        bld.recurse('test')
+#        bld.recurse('test')
 #        bld.recurse('examples/print_cpuinfo')

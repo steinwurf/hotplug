@@ -11,21 +11,10 @@
 #include <boost/asio/io_service.hpp>
 #include <platform/config.hpp>
 
-
-
 #if defined(PLATFORM_LINUX)
     #include "handle_hotplug_linux.hpp"
 #endif
 
-void print_add_info(std::string device)
-{
-    std::cout << "add: " << device << std::endl;
-}
-
-void print_remove_info(std::string device)
-{
-    std::cout << "remove:" << device << std::endl;
-}
 
 namespace hotplug
 {
@@ -37,8 +26,7 @@ namespace hotplug
     {
         boost::asio::io_service io;
 
-        handle_hotplug_linux monitor = handle_hotplug_linux(io,
-                                                            add_callback,
+        handle_hotplug_linux monitor = handle_hotplug_linux(add_callback,
                                                             remove_callback);
         io.run();
         monitor.join_thread();

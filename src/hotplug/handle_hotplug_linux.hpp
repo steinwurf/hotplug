@@ -11,10 +11,12 @@
 #include <libudev.h>
 
 
-#include <boost/thread.hpp>
+#include <thread>
 
 #include "device_added_handler.hpp"
 #include "device_removed_handler.hpp"
+
+#include "handle_hotplug.hpp"
 
 
 namespace hotplug
@@ -23,10 +25,9 @@ namespace hotplug
     class handle_hotplug_linux: public handle_hotplug
     {
     public:
-        handle_hotplug_linux(boost::asio::io_service io,
-                       std::function<void(std::string)> add_callback,
+        handle_hotplug_linux(std::function<void(std::string)> add_callback,
                        std::function<void(std::string)> remove_callback):
-            m_io(io), m_add_callback(add_callback),
+            m_add_callback(add_callback),
             m_remove_callback(remove_callback)
         {
 
@@ -58,7 +59,7 @@ namespace hotplug
             udev_unref(m_hotplug);
         }
 
-        void run()
+        void run(boost::asio::io_service& io)
         {
             // create the poll item
             pollfd items[1];
@@ -82,16 +83,16 @@ namespace hotplug
                    && udev_device_get_devnode(dev) != NULL)
                 {
 
-                    if((std::string)udev_device_get_action(dev).compare("add") == 0)
+                    if(((std::string)udev_device_get_action(dev)).compare("add") == 0)
                     {
                         device_added_handler dah = {m_add_callback, "add"};
-                        m_io.post(dah);
+                        io.post(dah);
                     }
 
-                    if((std::string)udev_device_get_action(dev).compare("remove") == 0)
+                    if(((std::string)udev_device_get_action(dev)).compare("remove") == 0)
                     {
                         device_added_handler drh = {m_add_callback, "remove"};
-                        m_io.post(drh);
+                        io.post(drh);
                     }
 
                     udev_device_unref(dev);
@@ -110,14 +111,14 @@ namespace hotplug
             while(true)
             {
 
-                run(add_callback, remove_callback);
+                run(io);
             }
             deinit();
         }
 
         void start_hotplug_monitoring()
         {
-            m_thread = std::thread(execute_run);
+            m_hotplug_thread = std::thread(execute_run, std::ref(io));
         }
 
         void join_thread()
