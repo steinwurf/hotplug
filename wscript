@@ -55,7 +55,7 @@ def build(bld):
         'DEFINES_STEINWURF_VERSION',
         'STEINWURF_CPUID_VERSION="{}"'.format(VERSION))
 
-    bld.recurse('src/cpuid')
+    bld.recurse('src/hotplug')
 
     if bld.is_toplevel():
 

@@ -3,9 +3,4 @@
 // See accompanying file LICENSE.rst or
 // http://www.steinwurf.com/licensing
 
-#include "hotplug_cam.hpp"
-
-int main(void)
-{
-
-}
+#include <libudev.h>
