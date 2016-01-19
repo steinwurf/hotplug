@@ -4,6 +4,7 @@
 // http://www.steinwurf.com/licensing
 
 #pragma once
+
 #include <functional>
 namespace hotplug
 {
