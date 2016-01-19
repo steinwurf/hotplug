@@ -13,5 +13,29 @@
 
 namespace hotplug
 {
+    hotpluginfo::hotpluginfo()
+    {
+        m_action = "";
+        m_device = "";
+    }
 
+    std::string hotpluginfo::get_action()
+    {
+        return m_action;
+    }
+
+    void hotpluginfo::set_action(std::string action)
+    {
+        m_action = action;
+    }
+
+    std::string hotpluginfo::get_device()
+    {
+        return m_device;
+    }
+
+    void hotpluginfo::set_device(std::string device)
+    {
+        m_device = device;
+    }
 }

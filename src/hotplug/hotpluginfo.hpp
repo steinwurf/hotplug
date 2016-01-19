@@ -14,9 +14,9 @@ namespace hotplug
         ~hotpluginfo();
 
         std::string get_action();
-        std::string set_action(std::string action);
+        void set_action(std::string action);
         std::string get_device();
-        std::string get_device(std::string device);
+        void set_device(std::string device);
 
     private:
         std::string m_action;
