@@ -28,12 +28,9 @@ namespace hotplug
     // public:
     //      using handle_hotplug::m_add_callback;
     public:
-        handle_hotplug_linux(std::function<void(std::string)> add_callback,
-                             std::function<void(std::string)> remove_callback)
-        {
-            m_add_callback = add_callback;
-            m_remove_callback = remove_callback;
-        }
+        // handle_hotplug_linux()
+        // {
+        // }
 
         void init()
         {
@@ -101,8 +98,6 @@ namespace hotplug
 
                     // clear the revents
                     items[0].revents = 0;
-
-
                 }
             }
         }

@@ -17,6 +17,16 @@ namespace hotplug
         virtual void init() = 0;
         virtual void deinit() = 0;
         virtual void run(boost::asio::io_service& io) = 0;
+
+        void set_add_callback(std::function<void(std::string)> add_callback)
+        {
+            m_add_callback = add_callback;
+        }
+
+        void set_remove_callback(std::function<void(std::string)> remove_callback)
+        {
+            m_remove_callback = remove_callback;
+        }
         // virtual void execute_run(boost::asio::io_service& io) = 0;
         // virtual void start_hotplug_monitoring(boost::asio::io_service& io) = 0;
 
