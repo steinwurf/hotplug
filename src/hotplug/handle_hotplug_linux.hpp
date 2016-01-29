@@ -25,12 +25,7 @@ namespace hotplug
     class handle_hotplug_linux: public handle_hotplug
     {
 
-    // public:
-    //      using handle_hotplug::m_add_callback;
     public:
-        // handle_hotplug_linux()
-        // {
-        // }
 
         void init()
         {
@@ -81,16 +76,22 @@ namespace hotplug
                 if(udev_device_get_action(dev) != NULL
                    && udev_device_get_devnode(dev) != NULL)
                 {
+                    std::string action_and_device =
+                        ((std::string)udev_device_get_action(dev)) +
+                        "," + ((std::string)udev_device_get_devnode(dev));
 
                     if(((std::string)udev_device_get_action(dev)).compare("add") == 0)
                     {
-                        device_added_handler dah = {m_add_callback, "add"};
+
+                        device_added_handler dah = {m_add_callback,
+                                                    action_and_device};
                         io.post(dah);
                     }
 
                     if(((std::string)udev_device_get_action(dev)).compare("remove") == 0)
                     {
-                        device_added_handler drh = {m_remove_callback, "remove"};
+                        device_added_handler drh = {m_remove_callback,
+                                                    action_and_device};
                         io.post(drh);
                     }
 
@@ -102,32 +103,9 @@ namespace hotplug
             }
         }
 
-//         virtual void execute_run(boost::asio::io_service& io)
-//         {
-//             init();
-//             while(true)
-//             {
-
-//                 run(io);
-//             }
-//             deinit();
-//         }
-
-//         virtual void start_hotplug_monitoring(boost::asio::io_service& io)
-//         {
-//             m_hotplug_thread = std::thread(execute_run, io);
-
-// //            m_hotplug_thread([&]{this->execute_run(io);});
-//         }
-
-//         void join_thread()
-//         {
-//             m_hotplug_thread.join();
-//         }
-
     private:
         udev* m_hotplug;
         udev_monitor* m_hotplug_monitor;
-        std::thread m_hotplug_thread;
+//        std::thread m_hotplug_thread;
     };
 }
