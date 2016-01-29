@@ -17,8 +17,8 @@ namespace hotplug
         virtual void init() = 0;
         virtual void deinit() = 0;
         virtual void run(boost::asio::io_service& io) = 0;
-        virtual void execute_run(boost::asio::io_service& io) = 0;
-        virtual void start_hotplug_monitoring(boost::asio::io_service& io) = 0;
+        // virtual void execute_run(boost::asio::io_service& io) = 0;
+        // virtual void start_hotplug_monitoring(boost::asio::io_service& io) = 0;
 
     protected:
         boost::asio::io_service m_io;

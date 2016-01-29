@@ -24,13 +24,15 @@ namespace hotplug
 
     class handle_hotplug_linux: public handle_hotplug
     {
+
+    // public:
+    //      using handle_hotplug::m_add_callback;
     public:
         handle_hotplug_linux(std::function<void(std::string)> add_callback,
-                       std::function<void(std::string)> remove_callback):
-            m_add_callback(add_callback),
-            m_remove_callback(remove_callback)
+                             std::function<void(std::string)> remove_callback)
         {
-
+            m_add_callback = add_callback;
+            m_remove_callback = remove_callback;
         }
 
         void init()
@@ -91,7 +93,7 @@ namespace hotplug
 
                     if(((std::string)udev_device_get_action(dev)).compare("remove") == 0)
                     {
-                        device_added_handler drh = {m_add_callback, "remove"};
+                        device_added_handler drh = {m_remove_callback, "remove"};
                         io.post(drh);
                     }
 
@@ -105,26 +107,28 @@ namespace hotplug
             }
         }
 
-        void execute_run()
-        {
-            init();
-            while(true)
-            {
+//         virtual void execute_run(boost::asio::io_service& io)
+//         {
+//             init();
+//             while(true)
+//             {
 
-                run(io);
-            }
-            deinit();
-        }
+//                 run(io);
+//             }
+//             deinit();
+//         }
 
-        void start_hotplug_monitoring()
-        {
-            m_hotplug_thread = std::thread(execute_run, std::ref(io));
-        }
+//         virtual void start_hotplug_monitoring(boost::asio::io_service& io)
+//         {
+//             m_hotplug_thread = std::thread(execute_run, io);
 
-        void join_thread()
-        {
-            m_hotplug_thread.join();
-        }
+// //            m_hotplug_thread([&]{this->execute_run(io);});
+//         }
+
+//         void join_thread()
+//         {
+//             m_hotplug_thread.join();
+//         }
 
     private:
         udev* m_hotplug;

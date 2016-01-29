@@ -5,31 +5,39 @@
 
 #include "hotplug.hpp"
 
-
+#include <thread>
 #include <iostream>
 
-#include <boost/asio/io_service.hpp>
-#include <platform/config.hpp>
+//#include <boost/asio/io_service.hpp>
+// #include <platform/config.hpp>
 
-#if defined(PLATFORM_LINUX)
-    #include "handle_hotplug_linux.hpp"
-#endif
+// #if defined(PLATFORM_LINUX)
+//     #include "handle_hotplug_linux.hpp"
+// #endif
 
 
 namespace hotplug
 {
 
 
+    void execute_run(handle_hotplug& monitor, boost::asio::io_service& io)
+    {
+        monitor.run(io);
+    }
 
     void start_hotplug(std::function<void(std::string)> add_callback,
                        std::function<void(std::string)> remove_callback)
     {
         boost::asio::io_service io;
 
+#if defined(PLATFORM_LINUX)
         handle_hotplug_linux monitor = handle_hotplug_linux(add_callback,
                                                             remove_callback);
+#endif
+        std::thread hotplug_thread([&]{monitor.run(io);});
+        execute_run(monitor, io);
         io.run();
-        monitor.join_thread();
+        hotplug_thread.join();
     }
 
 
