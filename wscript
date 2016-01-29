@@ -45,6 +45,8 @@ def resolve(ctx):
 def configure(conf):
 
     conf.load("wurf_common_tools")
+    if conf.is_mkspec_platform('linux'):
+        conf.check_cfg(package='libudev', args='--cflags --libs')
 
 
 def build(bld):

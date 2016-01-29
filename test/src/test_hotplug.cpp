@@ -21,6 +21,7 @@ namespace hotplug
 
     static void test_hotplug()
     {
+
         std::function<void(std::string)> add_callback = [](std::string add_string){
 
             EXPECT_TRUE(is_correct_action("add", get_action_string(add_string)));
