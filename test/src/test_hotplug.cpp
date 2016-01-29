@@ -34,4 +34,10 @@ namespace hotplug
 
         start_hotplug(add_callback, remove_callback);
     }
+
+}
+
+TEST(test_hotplug, invoke_api)
+{
+    hotplug::test_hotplug();
 }
