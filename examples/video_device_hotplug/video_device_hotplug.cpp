@@ -20,12 +20,12 @@ int main(void)
     boost::asio::io_service io;
     boost::asio::io_service::work work(io);
 
-    std::cout << "john" << std::endl;
+    std::thread hotplug_thread;
 
-    std::thread hotplug_thread = hotplug::start_hotplug(io, single_callback, single_callback);
+    hotplug::start_hotplug(io, hotplug_thread, single_callback, single_callback);
 
     io.run();
-
+    std::cout << "john" << std::endl;
     hotplug_thread.join();
     return 0;
 }

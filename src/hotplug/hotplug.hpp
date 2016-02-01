@@ -21,6 +21,9 @@
 namespace hotplug
 {
     void execute_run(handle_hotplug& hotplug_dev, boost::asio::io_service& io);
-    std::thread start_hotplug(boost::asio::io_service& io, std::function<void(std::string, std::string)> add_callback,
-                       std::function<void(std::string, std::string)> remove_callback);
+    void start_hotplug(boost::asio::io_service& io, std::thread hotplug_thread,
+                       std::function<void(std::string,
+                                          std::string)> add_callback,
+                       std::function<void(std::string,
+                                          std::string)> remove_callback);
 }
