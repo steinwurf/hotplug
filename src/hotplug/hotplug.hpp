@@ -20,10 +20,18 @@
 
 namespace hotplug
 {
-    void execute_run(handle_hotplug& hotplug_dev, boost::asio::io_service& io);
-    void start_hotplug(boost::asio::io_service& io, std::thread hotplug_thread,
-                       std::function<void(std::string,
-                                          std::string)> add_callback,
-                       std::function<void(std::string,
-                                          std::string)> remove_callback);
+    class hotplug
+    {
+    public:
+        void execute_run(handle_hotplug& hotplug_dev, boost::asio::io_service& io);
+        void start_hotplug(boost::asio::io_service& io,
+                           std::function<void(std::string,
+                                              std::string)> add_callback,
+                           std::function<void(std::string,
+                                              std::string)> remove_callback);
+        void join_thread();
+    private:
+        std::thread m_hotplug_thread;
+    };
+
 }

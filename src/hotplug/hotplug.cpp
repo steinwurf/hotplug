@@ -20,7 +20,8 @@ namespace hotplug
 {
 
 
-    void execute_run(handle_hotplug& monitor, boost::asio::io_service& io)
+    void hotplug::execute_run(handle_hotplug& monitor,
+                              boost::asio::io_service& io)
     {
         monitor.init();
         while(true)
@@ -30,7 +31,7 @@ namespace hotplug
         monitor.deinit();
     }
 
-    void start_hotplug(boost::asio::io_service& io, std::thread hotplug_thread,
+    void hotplug::start_hotplug(boost::asio::io_service& io,
                        std::function<void(std::string,
                                           std::string)> add_callback,
                        std::function<void(std::string,
@@ -44,8 +45,11 @@ namespace hotplug
         monitor.set_remove_callback(remove_callback);
 
         //std::thread hotplug_thread([&]{execute_run(monitor, io);});
-        hotplug_thread([&]{execute_run(monitor, io);});
+        m_hotplug_thread = std::thread([&]{execute_run(monitor, io);});
     }
 
-
+    void hotplug::join_thread()
+    {
+        m_hotplug_thread.join();
+    }
 }
