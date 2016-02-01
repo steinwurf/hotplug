@@ -19,9 +19,7 @@
 
 namespace hotplug
 {
-#if defined(PLATFORM_LINUX)
     void execute_run(handle_hotplug& hotplug_dev, boost::asio::io_service& io);
-#endif
-    void start_hotplug(std::function<void(std::string)> add_callback,
-                       std::function<void(std::string)> remove_callback);
+    void start_hotplug(std::function<void(std::string, std::string)> add_callback,
+                       std::function<void(std::string, std::string)> remove_callback);
 }

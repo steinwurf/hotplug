@@ -5,13 +5,17 @@
 
 #include <functional>
 
+#include <iostream> // only for test
 struct device_added_handler
 {
-    std::function<void(std::string)> m_callback;
+    std::function<void(std::string, std::string)> m_callback;
+    std::string m_action;
     std::string m_device;
 
-    device_added_handler(std::function<void(std::string)> callback,
+    device_added_handler(std::function<void(std::string, std::string)> callback,
+                         std::string action,
                          std::string device): m_callback(callback),
+                                              m_action(action),
                                               m_device(device)
     {
 
@@ -19,6 +23,8 @@ struct device_added_handler
 
     void operator ()()
     {
-        m_callback(m_device);
+        std::cout << "YAY! I am doing something" << std::endl;
+
+        m_callback(m_action, m_device);
     }
 };

@@ -46,6 +46,10 @@ def configure(conf):
 
     conf.load("wurf_common_tools")
     if conf.is_mkspec_platform('linux'):
+
+        if not conf.env['LIB_PTHREAD']:
+            conf.check_cxx(lib='pthread')
+
         conf.check_cfg(package='libudev', args='--cflags --libs')
 
 
@@ -64,4 +68,4 @@ def build(bld):
         # Only build tests when executed from the top-level wscript,
         # i.e. not when included as a dependency
         bld.recurse('test')
-#        bld.recurse('examples/print_cpuinfo')
+        bld.recurse('examples/video_device_hotplug')

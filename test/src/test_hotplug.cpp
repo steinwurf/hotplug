@@ -22,18 +22,12 @@ namespace hotplug
     static void test_hotplug()
     {
 
-        std::function<void(std::string)> add_callback = [](std::string add_string){
-
-            EXPECT_TRUE(is_correct_action("add", get_action_string(add_string)));
-            std::cout << "add action: "  << add_string << std::endl;
+        std::function<void(std::string, std::string)> single_callback =
+            [](std::string action, std::string device){
+            std::cout << "Action: "  << action << " device: " <<  device << std::endl;
         };
 
-        std::function<void(std::string)> remove_callback = [](std::string remove_string){
-            EXPECT_TRUE(is_correct_action("remove", get_action_string(remove_string)));
-            std::cout << "remove action: "  << remove_string << std::endl;
-        };
-
-        start_hotplug(add_callback, remove_callback);
+        start_hotplug(single_callback, single_callback);
     }
 
 }

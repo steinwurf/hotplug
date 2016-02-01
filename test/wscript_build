@@ -5,5 +5,5 @@ bld.program(
     features='cxx test',
     source=bld.path.ant_glob('**/*.cpp'),
     target='hotplug_tests',
-    use=['hotplug', 'gtest', 'boost_program_options', 'boost_system'],
-    uselib=['LIBUDEV'])
+    use=['hotplug', 'gtest'],
+    uselib=['LIBUDEV', 'PTHREAD'])

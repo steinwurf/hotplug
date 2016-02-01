@@ -30,19 +30,18 @@ namespace hotplug
         monitor.deinit();
     }
 
-    void start_hotplug(std::function<void(std::string)> add_callback,
-                       std::function<void(std::string)> remove_callback)
+    void start_hotplug(std::function<void(std::string, std::string)> add_callback,
+                       std::function<void(std::string, std::string)> remove_callback)
     {
         boost::asio::io_service io;
-
 #if defined(PLATFORM_LINUX)
-        handle_hotplug_linux monitor;// = handle_hotplug_linux();
+        handle_hotplug_linux monitor;
 #endif
         monitor.set_add_callback(add_callback);
         monitor.set_remove_callback(remove_callback);
 
-        std::thread hotplug_thread([&]{monitor.run(io);});
-        execute_run(monitor, io);
+        std::thread hotplug_thread([&]{execute_run(monitor, io);});
+
         io.run();
         hotplug_thread.join();
     }

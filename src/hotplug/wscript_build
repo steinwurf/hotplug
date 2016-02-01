@@ -6,7 +6,8 @@ bld.stlib(
     source=bld.path.ant_glob('**/*.cpp'),
     target='hotplug',
     export_includes=['..'],
-    use=['platform_includes']
+    use=['platform_includes', 'boost_includes', 'boost_system'],
+    uselib=['LIBUDEV', 'PTHREAD']
 )
 
 # Add a manual dependency to rebuild cpuinfo.cpp if a header file changes.

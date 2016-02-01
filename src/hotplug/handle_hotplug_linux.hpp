@@ -10,6 +10,8 @@
 #include <poll.h>
 #include <libudev.h>
 
+#include <iostream> // for test only
+
 
 #include <thread>
 
@@ -76,22 +78,23 @@ namespace hotplug
                 if(udev_device_get_action(dev) != NULL
                    && udev_device_get_devnode(dev) != NULL)
                 {
-                    std::string action_and_device =
-                        ((std::string)udev_device_get_action(dev)) +
-                        "," + ((std::string)udev_device_get_devnode(dev));
+                    std::string action = (std::string)udev_device_get_action(dev);
+                    std::string device = (std::string)udev_device_get_devnode(dev);
 
                     if(((std::string)udev_device_get_action(dev)).compare("add") == 0)
                     {
+                        std::cout << "I am add" << std::endl;
+                        device_added_handler dah = {m_add_callback, action, device};
 
-                        device_added_handler dah = {m_add_callback,
-                                                    action_and_device};
                         io.post(dah);
                     }
 
                     if(((std::string)udev_device_get_action(dev)).compare("remove") == 0)
                     {
+                        std::cout << "I am remove" << std::endl;
                         device_added_handler drh = {m_remove_callback,
-                                                    action_and_device};
+                                                    ((std::string)udev_device_get_action(dev)),
+                                                    ((std::string)udev_device_get_devnode(dev))};
                         io.post(drh);
                     }
 
