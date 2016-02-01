@@ -83,15 +83,12 @@ namespace hotplug
 
                     if(((std::string)udev_device_get_action(dev)).compare("add") == 0)
                     {
-                        std::cout << "I am add" << std::endl;
                         device_added_handler dah = {m_add_callback, action, device};
-
                         io.post(dah);
                     }
 
                     if(((std::string)udev_device_get_action(dev)).compare("remove") == 0)
                     {
-                        std::cout << "I am remove" << std::endl;
                         device_added_handler drh = {m_remove_callback,
                                                     ((std::string)udev_device_get_action(dev)),
                                                     ((std::string)udev_device_get_devnode(dev))};

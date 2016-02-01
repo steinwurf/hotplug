@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <thread>
 
 #include <hotplug/hotplug.hpp>
 
@@ -17,8 +17,15 @@ int main(void)
         std::cout << "Action: "  << action << " device: " <<  device << std::endl;
     };
 
-    hotplug::start_hotplug(single_callback, single_callback);
+    boost::asio::io_service io;
+    boost::asio::io_service::work work(io);
 
+    std::cout << "john" << std::endl;
 
+    std::thread hotplug_thread = hotplug::start_hotplug(io, single_callback, single_callback);
+
+    io.run();
+
+    hotplug_thread.join();
     return 0;
 }

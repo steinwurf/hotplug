@@ -27,7 +27,11 @@ namespace hotplug
             std::cout << "Action: "  << action << " device: " <<  device << std::endl;
         };
 
-        start_hotplug(single_callback, single_callback);
+        boost::asio::io_service io;
+        boost::asio::io_service::work work(io);
+
+        start_hotplug(io, single_callback, single_callback);
+        io.run();
     }
 
 }

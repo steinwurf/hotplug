@@ -7,6 +7,7 @@
 
 #include <string>
 #include <functional>
+#include <thread>
 
 #include <boost/asio/io_service.hpp>
 #include <platform/config.hpp>
@@ -20,6 +21,6 @@
 namespace hotplug
 {
     void execute_run(handle_hotplug& hotplug_dev, boost::asio::io_service& io);
-    void start_hotplug(std::function<void(std::string, std::string)> add_callback,
+    std::thread start_hotplug(boost::asio::io_service& io, std::function<void(std::string, std::string)> add_callback,
                        std::function<void(std::string, std::string)> remove_callback);
 }

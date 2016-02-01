@@ -23,8 +23,6 @@ struct device_added_handler
 
     void operator ()()
     {
-        std::cout << "YAY! I am doing something" << std::endl;
-
         m_callback(m_action, m_device);
     }
 };
