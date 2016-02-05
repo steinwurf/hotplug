@@ -7,45 +7,42 @@
 
 #include <thread>
 #include <iostream>
-
-//#include <boost/asio/io_service.hpp>
-// #include <platform/config.hpp>
-
-// #if defined(PLATFORM_LINUX)
-//     #include "handle_hotplug_linux.hpp"
-// #endif
-
+#include <cassert>
 
 namespace hotplug
 {
 
+    hotplug::hotplug(boost::asio::io_service& io) : m_io(io)
+    {
+
+        m_running = true;
+    }
 
     void hotplug::execute_run(handle_hotplug& monitor,
                               boost::asio::io_service& io)
     {
         monitor.init();
-        while(true)
+        while(m_running)
         {
-            monitor.run(io);
+             monitor.run(io);
         }
         monitor.deinit();
     }
 
-    void hotplug::start_hotplug(boost::asio::io_service& io,
-                       std::function<void(std::string,
+    void hotplug::start_hotplug(std::function<void(std::string,
                                           std::string)> add_callback,
-                       std::function<void(std::string,
+                                std::function<void(std::string,
                                           std::string)> remove_callback)
     {
 
-#if defined(PLATFORM_LINUX)
-        handle_hotplug_linux monitor;
-#endif
-        monitor.set_add_callback(add_callback);
-        monitor.set_remove_callback(remove_callback);
+        m_monitor.set_add_callback(add_callback);
+        m_monitor.set_remove_callback(remove_callback);
+        m_hotplug_thread = std::thread([&]{execute_run(m_monitor, m_io);});
+    }
 
-        //std::thread hotplug_thread([&]{execute_run(monitor, io);});
-        m_hotplug_thread = std::thread([&]{execute_run(monitor, io);});
+    void hotplug::stop_hotplug()
+    {
+        m_running = false;
     }
 
     void hotplug::join_thread()

@@ -12,6 +12,7 @@
 #include <gtest/gtest.h>
 
 #include "../helper_functions.hpp"
+#include "../reset_usb.h"
 
 
 
@@ -21,23 +22,28 @@ namespace hotplug
 
     static void test_hotplug()
     {
+
         std::function<void(std::string, std::string)> single_callback =
             [](std::string action, std::string device){
-            std::cout << "Action: "  << action << " device: " <<  device << std::endl;
+
+            if(device.find("video") != std::string::npos){
+                std::cout << "Video device: "  << device <<
+                " action performed: " <<  action << std::endl;
+            }
         };
 
         boost::asio::io_service io;
         boost::asio::io_service::work work(io);
 
-        hotplug::hotplug plug;
-
-        plug.start_hotplug(io, single_callback, single_callback);
-
-        io.run();
+        hotplug plug(io);
         std::cout << "john" << std::endl;
+        plug.start_hotplug(single_callback, single_callback);
+        io.run();
+
+        //reset_usb("dev/video0");
+        plug.stop_hotplug();
         plug.join_thread();
     }
-
 }
 
 TEST(test_hotplug, invoke_api)

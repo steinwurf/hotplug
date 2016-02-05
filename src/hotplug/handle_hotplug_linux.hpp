@@ -7,13 +7,9 @@
 
 #include <functional>
 #include <string>
+#include <thread>
 #include <poll.h>
 #include <libudev.h>
-
-#include <iostream> // for test only
-
-
-#include <thread>
 
 #include "device_added_handler.hpp"
 #include "device_removed_handler.hpp"
@@ -106,6 +102,5 @@ namespace hotplug
     private:
         udev* m_hotplug;
         udev_monitor* m_hotplug_monitor;
-//        std::thread m_hotplug_thread;
     };
 }

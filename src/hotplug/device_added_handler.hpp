@@ -5,7 +5,6 @@
 
 #include <functional>
 
-#include <iostream> // only for test
 struct device_added_handler
 {
     std::function<void(std::string, std::string)> m_callback;
