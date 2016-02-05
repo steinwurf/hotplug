@@ -1,7 +1,5 @@
-// Copyright Steinwurf ApS 2016.
-// Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
-// See accompanying file LICENSE.rst or
-// http://www.steinwurf.com/licensing
+// Copyright (c) 2016, Steinwurf
+// All rights reserved.
 
 #pragma once
 
@@ -64,7 +62,8 @@ namespace hotplug
             {
 
                 // receive the relevant device
-                udev_device* dev = udev_monitor_receive_device(m_hotplug_monitor);
+                udev_device* dev =
+                    udev_monitor_receive_device(m_hotplug_monitor);
                 if(!dev)
                 {
                     // error receiving device, skip it
@@ -74,20 +73,30 @@ namespace hotplug
                 if(udev_device_get_action(dev) != NULL
                    && udev_device_get_devnode(dev) != NULL)
                 {
-                    std::string action = (std::string)udev_device_get_action(dev);
-                    std::string device = (std::string)udev_device_get_devnode(dev);
+                    std::string action =
+                        (std::string)udev_device_get_action(dev);
+                    std::string device =
+                        (std::string)udev_device_get_devnode(dev);
 
-                    if(((std::string)udev_device_get_action(dev)).compare("add") == 0)
+                    if(action.compare("add") == 0)
                     {
-                        device_added_handler dah = {m_add_callback, action, device};
+                        device_added_handler dah =
+                            {
+                                m_add_callback,
+                                action,
+                                device
+                            };
                         io.post(dah);
                     }
 
-                    if(((std::string)udev_device_get_action(dev)).compare("remove") == 0)
+                    if(action.compare("remove") == 0)
                     {
-                        device_added_handler drh = {m_remove_callback,
-                                                    ((std::string)udev_device_get_action(dev)),
-                                                    ((std::string)udev_device_get_devnode(dev))};
+                        device_added_handler drh =
+                            {
+                                m_remove_callback,
+                                action,
+                                device
+                            };
                         io.post(drh);
                     }
 

@@ -1,7 +1,5 @@
-// Copyright Steinwurf ApS 2016.
-// Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
-// See accompanying file LICENSE.rst or
-// http://www.steinwurf.com/licensing
+// Copyright (c) 2016, Steinwurf
+// All rights reserved.
 
 #pragma once
 
@@ -24,8 +22,9 @@ namespace hotplug
             m_add_callback = add_callback;
         }
 
-        void set_remove_callback(std::function<void(std::string,
-                                                    std::string)> remove_callback)
+        void set_remove_callback(
+            std::function<void(std::string,
+                               std::string)> remove_callback)
         {
             m_remove_callback = remove_callback;
         }

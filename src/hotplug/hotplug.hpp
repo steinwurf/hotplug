@@ -1,7 +1,5 @@
-// Copyright Steinwurf ApS 2016.
-// Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
-// See accompanying file LICENSE.rst or
-// http://www.steinwurf.com/licensing
+// Copyright (c) 2016, Steinwurf
+// All rights reserved.
 
 #pragma once
 
@@ -29,7 +27,8 @@ namespace hotplug
         void stop_hotplug();
         void join_thread();
     private:
-        void execute_run(handle_hotplug& hotplug_dev, boost::asio::io_service& io);
+        void execute_run(handle_hotplug& hotplug_dev,
+                         boost::asio::io_service& io);
 
     private:
         bool m_running;

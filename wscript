@@ -69,3 +69,4 @@ def build(bld):
         # i.e. not when included as a dependency
         bld.recurse('test')
         bld.recurse('examples/video_device_hotplug')
+        bld.recurse('examples/usb_device_hotplug')

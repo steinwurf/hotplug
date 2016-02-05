@@ -1,12 +1,8 @@
-// Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
-// See accompanying file LICENSE.rst or
-// http://www.steinwurf.com/licensing
-
+// Copyright (c) 2016, Steinwurf
+// All rights reserved.
 
 #include <iostream>
 #include <string>
-#include <vector>
-#include <thread>
 
 #include <hotplug/hotplug.hpp>
 
@@ -14,14 +10,14 @@
 ///
 /// This example show to use hotplug for registre if a video device is pluged in
 /// or pluged out of the host device.
-
-
 int main(void)
 {
     std::function<void(std::string, std::string)> single_callback =
-        [](std::string action, std::string device){
+        [](std::string action, std::string device)
+        {
 
-        if(device.find("video") != std::string::npos){
+        if(device.find("video") != std::string::npos)
+        {
             std::cout << "Video device: "  << device <<
             " action performed: " <<  action << std::endl;
         }

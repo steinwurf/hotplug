@@ -1,9 +1,5 @@
-// Copyright Steinwurf ApS 2016.
-// Distributed under the "STEINWURF RESEARCH LICENSE 1.0".
-// See accompanying file LICENSE.rst or
-// http://www.steinwurf.com/licensing
-
-#include <hotplug/hotplug.hpp>
+// Copyright (c) 2016, Steinwurf
+// All rights reserved.
 
 #include <cstdint>
 #include <iostream>
@@ -11,11 +7,7 @@
 #include <functional>
 #include <gtest/gtest.h>
 
-#include "../helper_functions.hpp"
-#include "../reset_usb.h"
-
-
-
+#include <hotplug/hotplug.hpp>
 
 namespace hotplug
 {
@@ -40,7 +32,6 @@ namespace hotplug
         plug.start_hotplug(single_callback, single_callback);
         io.run();
 
-        //reset_usb("dev/video0");
         plug.stop_hotplug();
         plug.join_thread();
     }
