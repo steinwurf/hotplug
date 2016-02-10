@@ -1,0 +1,83 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Python
+*.pyc
+
+# Binaries compiled by make
+/makefile/encode_decode_on_the_fly
+/makefile/encode_decode_simple
+/makefile/udp_receiver
+/makefile/udp_sender
+
+# Compiled Doxygen documentation
+/doxygen/html
+
+# For projects that use Waf for building: http://code.google.com/p/waf/
+waf-*
+.waf-*
+.lock-*
+build
+bundle_dependencies
+last_config.sh
+
+# Gnu Global tag files
+GPATH
+GRTAGS
+GSYMS
+GTAGS
+
+# Emacs temp / auto save
+\#*#
+*.#*
+*~
+
+# compiled documentation
+*.pdf
+
+#Eclipse ignore
+.cproject
+.project
+.metadata
+local.properties
+.classpath
+
+# Visual Studio ignore
+*.bat
+*.sln
+*.suo
+*.user
+*.ncb
+*.sdf
+*.opensdf
+*.log
+VSProjects
+
+# Xcode ignore
+.DS_Store
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcworkspace
+!default.xcworkspace
+xcuserdata
+profile
+*.moved-aside
+DerivedData
+.idea/

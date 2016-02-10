@@ -34,7 +34,8 @@ namespace hotplug
             }
 
             // create the udev monitor
-            m_hotplug_monitor = udev_monitor_new_from_netlink(m_hotplug, "udev");
+            m_hotplug_monitor = udev_monitor_new_from_netlink(m_hotplug,
+                                                              "udev");
 
             // start receiving hotplug events
             udev_monitor_enable_receiving(m_hotplug_monitor);
